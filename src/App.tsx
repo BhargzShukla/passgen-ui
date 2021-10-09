@@ -1,25 +1,14 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Box, Divider, Heading } from "@chakra-ui/react";
+import * as React from "react";
+import { PasswordGeneratorForm } from "./components/password-generator";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Box rounded="lg" borderWidth={1} paddingX={4} paddingY={6} marginY={8}>
+      <Heading marginBottom={6}>Password Generator</Heading>
+      <Divider marginY={6} />
+      <PasswordGeneratorForm />
+    </Box>
   );
 }
 

@@ -1,14 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+
+const theme = {
+  styles: {
+    global: {
+      "html, body": {
+        color: "gray.700",
+        lineHeight: "tall",
+      },
+      "#root": {
+        maxWidth: "65ch",
+        margin: "0 auto",
+      },
+    },
+  },
+};
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ChakraProvider theme={extendTheme(theme)}>
+      <App />
+    </ChakraProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
