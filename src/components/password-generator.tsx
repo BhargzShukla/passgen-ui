@@ -24,11 +24,9 @@ import {
   Switch,
 } from "@chakra-ui/react";
 import * as React from "react";
+import { allowedPasswordLength, apiUrl } from "../constants";
 import { formReducer, init, initialState } from "../reducer";
 import { ErrorFallback } from "./error-fallback";
-
-const lengthMin = 8;
-const lengthMax = 64;
 
 export function PasswordGeneratorForm() {
   const [
@@ -37,7 +35,7 @@ export function PasswordGeneratorForm() {
   ] = React.useReducer(formReducer, initialState, init);
 
   const requestData = JSON.stringify({
-    length,
+    passwordLength: length,
     uppercase,
     numbers,
     symbols,
@@ -56,13 +54,10 @@ export function PasswordGeneratorForm() {
   }
 
   function copyToClipboard() {
-    if (
-      typeof data?.generatedPassword !== "string" ||
-      data?.generatedPassword.length <= 0
-    ) {
+    if (typeof data?.password !== "string" || data?.password.length <= 0) {
       return;
     }
-    navigator.clipboard.writeText(data?.generatedPassword).then(() => {
+    navigator.clipboard.writeText(data?.password).then(() => {
       dispatch({
         type: "copyToClipboardSuccess",
       });
@@ -75,7 +70,7 @@ export function PasswordGeneratorForm() {
     }
     (async () => {
       await window
-        .fetch("https://localhost:5001/api/passgen", {
+        .fetch(apiUrl, {
           method: "POST",
           body: requestData,
           headers: {
@@ -121,8 +116,8 @@ export function PasswordGeneratorForm() {
             onChange={(value) =>
               dispatch({ type: "setLength", payload: Number(value) })
             }
-            min={lengthMin}
-            max={lengthMax}
+            min={allowedPasswordLength.min}
+            max={allowedPasswordLength.max}
             maxWidth={100}
           >
             <NumberInputField />
@@ -136,8 +131,8 @@ export function PasswordGeneratorForm() {
             aria-label="Length of generated password"
             value={length}
             flex={1}
-            min={lengthMin}
-            max={lengthMax}
+            min={allowedPasswordLength.min}
+            max={allowedPasswordLength.max}
             size="lg"
             onChange={(value) =>
               dispatch({ type: "setLength", payload: Number(value) })
@@ -150,7 +145,7 @@ export function PasswordGeneratorForm() {
           </Slider>
         </Flex>
         <FormHelperText>
-          Pick the desired length for your new password
+          Pick the desired length for your new password. Must be between 8 & 64.
         </FormHelperText>
       </FormControl>
       <SimpleGrid columns={2} gap={4} marginY={8}>
@@ -189,7 +184,7 @@ export function PasswordGeneratorForm() {
         <InputGroup>
           <Input
             readOnly
-            defaultValue={data?.generatedPassword}
+            defaultValue={data?.password}
             variant="filled"
             padding={1}
           />
@@ -200,7 +195,7 @@ export function PasswordGeneratorForm() {
               width={8}
               height={8}
               onClick={copyToClipboard}
-              disabled={data?.generatedPassword?.length === 0}
+              disabled={data?.password?.length === 0}
             />
           </InputRightAddon>
         </InputGroup>

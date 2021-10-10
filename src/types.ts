@@ -1,5 +1,5 @@
 export type PasswordResponse = {
-  generatedPassword: string;
+  password: string;
   strength: number;
 };
 
